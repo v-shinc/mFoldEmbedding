@@ -26,8 +26,8 @@ bool eqOp(const uvec &lhs, const uvec &rhs){
 class MFoldEmbedding{
 	int DIM, REL_NUM, ENT_NUM, BATCH_SIZE, TRAIN_NUM;
 	double alpha, epsilon, gamma, beta;
-	vector <int> schema;
-	vector<pair<int, uvec> > trainData;
+	vector <int> &schema;
+	vector<pair<int, uvec> > &trainData;
 
 	using uvec_set = unordered_set <uvec, decltype(uvecHash)*, decltype(eqOp)* >;
 	unordered_map<int, uvec_set> positive;
@@ -60,15 +60,10 @@ public:
 		int trainNum, int dim, int relNum, int entNum, int batchSize,
 		double learning_rate, double _epsilon, double margin_gamma, double _beta,
 		char *_bias_out, char *_entity_out, char *_normal_out, char *_a_out)
-		:bias_out(_bias_out), entity_out(_entity_out), normal_out(_normal_out), a_out(_a_out),
+		:schema(_schema), trainData(_trainData),
+		DIM(dim), REL_NUM(relNum), ENT_NUM(entNum), BATCH_SIZE(batchSize), TRAIN_NUM(trainNum),
+		bias_out(_bias_out), entity_out(_entity_out), normal_out(_normal_out), a_out(_a_out),
 		alpha(learning_rate), epsilon(epsilon), gamma(margin_gamma), beta(_beta){
-		DIM = dim;
-		REL_NUM = relNum;
-		ENT_NUM = entNum;
-		BATCH_SIZE = batchSize;
-		TRAIN_NUM = trainNum;
-		schema = _schema;
-		trainData = _trainData;
 
 		A = vector <vec>(REL_NUM);
 		for (int i = 0; i < REL_NUM; i++) {
